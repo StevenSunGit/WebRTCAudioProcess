@@ -17,7 +17,7 @@
 #include <string>
 #include <vector>
 
-#include "webrtc/typedefs.h"
+#include "typedefs.h"
 
 #if defined(_MSC_VER)
 // Disable "new behavior: elements of array will be default initialized"
