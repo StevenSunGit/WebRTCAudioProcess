@@ -30,7 +30,7 @@ public class AudioEffectUtils {
     public void setEchoCancellationBean(int level){
         mEchoCancellationBean = new EchoCancellationBean();
         mEchoCancellationBean.setEnable(true);
-        mEchoCancellationBean.setEnable(true);
+        mEchoCancellationBean.setLevel(level);
     }
 
     public void setAutomaticGainControlMode(int mode){
