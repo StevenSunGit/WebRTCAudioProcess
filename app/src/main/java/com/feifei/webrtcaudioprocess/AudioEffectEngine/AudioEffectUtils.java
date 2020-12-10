@@ -10,6 +10,7 @@ public class AudioEffectUtils {
     /* 回声消除 */
     private EchoCancellationBean mEchoCancellationBean = null;
 
+    private AutomaticGainControl mAutomaticGainControl = null;
     static {
         System.loadLibrary("");
     }
@@ -30,6 +31,12 @@ public class AudioEffectUtils {
         mEchoCancellationBean = new EchoCancellationBean();
         mEchoCancellationBean.setEnable(true);
         mEchoCancellationBean.setEnable(true);
+    }
+
+    public void setAutomaticGainControlMode(int mode){
+        mAutomaticGainControl = new AutomaticGainControl();
+        mAutomaticGainControl.setEnable(true);
+        mAutomaticGainControl.setMode(mode);
     }
 
     private long AudioProcessingCreate(){
