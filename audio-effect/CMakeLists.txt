@@ -8,7 +8,9 @@ include_directories (webrtc)
 link_directories(${PROJECT_SOURCE_DIR}/libs/${ANDROID_ABI}/)
 link_directories($ENV{EXTRA_LIB_DIR})
 
-add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
+#搜索webrtc下所有文件，并存储在SRC_LIST
+aux_source_directory(webrtc SRC_LIST)
+add_library(${PROJECT_NAME} SHARED ${SRC_LIST})
 
 
 # Searches for a specified prebuilt library and stores the path as a
