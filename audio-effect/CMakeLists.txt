@@ -3,13 +3,13 @@ project(audio-effect)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -Wall -std=c++11 -fexceptions -fpermissive -fpic")
 
-include_directories (webrtc)
+include_directories (inc)
 
 link_directories(${PROJECT_SOURCE_DIR}/libs/${ANDROID_ABI}/)
 link_directories($ENV{EXTRA_LIB_DIR})
 
-#搜索webrtc下所有文件，并存储在SRC_LIST
-aux_source_directory(webrtc SRC_LIST)
+#src，并存储在SRC_LIST
+aux_source_directory(src/webrtc SRC_LIST)
 add_library(${PROJECT_NAME} SHARED ${SRC_LIST})
 
 
