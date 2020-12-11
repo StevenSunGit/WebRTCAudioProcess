@@ -1,6 +1,10 @@
 package com.feifei.webrtcaudioprocess.AudioEffectEngine;
 
 public class AudioEffectUtils {
+    static {
+        System.loadLibrary("");
+    }
+
     private long AudioProcessingId = 0;
     private long ExtendedFilterId = 0;
     private long DelayAgnosticId = 0;
@@ -17,14 +21,34 @@ public class AudioEffectUtils {
     private boolean mAutomaticGainControlEnable = false;
     private int mAutomaticGainControlMode = -1;
 
-    static {
-        System.loadLibrary("");
-    }
+    /* 语音活动检测 */
+    private boolean mVoiceActivityDetectionEnable = false;
+    private int mVoiceActivityDetectionLevel = -1;
 
     public AudioEffectUtils(){
         AudioProcessingId = AudioProcessingCreate();
         ExtendedFilterId = ExtendedFilterCreate();
         ExtendedFilterId = DelayAgnosticCreate();
+    }
+
+    public void setNoiseSuppressionLevel(int level){
+        mNoiseSuppressionEnable = true;
+        mNoiseSuppressionLevel = level;
+    }
+
+    public void setEchoCancellationLevel(int level){
+        mEchoCancellationEnable = true;
+        mEchoCancellationLevel = level;
+    }
+
+    public void setAutomaticGainControlMode(int mode){
+        mAutomaticGainControlEnable = true;
+        mAutomaticGainControlMode = mode;
+    }
+
+    public void setVoiceActivityDetectionLevel(int level){
+        mVoiceActivityDetectionEnable = true;
+        mVoiceActivityDetectionLevel = level;
     }
 
     private long AudioProcessingCreate(){
