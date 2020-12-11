@@ -6,4 +6,6 @@ public class AudioEffectInterface {
     }
 
     public native long audioProcessingCreate();
+    public native long extendedFilterCreate();
+    public native long delayAgnosticCreate();
 }

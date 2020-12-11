@@ -24,3 +24,11 @@
 extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffectEngine_AudioEffectInterface_audioProcessingCreate(JNIEnv *env, jobject thiz) {
     return 0;
 }
+
+extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffectEngine_AudioEffectInterface_extendedFilterCreate(JNIEnv *env, jobject thiz){
+    return 0;
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffectEngine_AudioEffectInterface_delayAgnosticCreate(JNIEnv *env, jobject thiz) {
+    return 0;
+}

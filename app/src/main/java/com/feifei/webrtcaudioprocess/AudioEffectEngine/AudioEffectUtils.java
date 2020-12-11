@@ -71,11 +71,11 @@ public class AudioEffectUtils {
     }
 
     private long extendedFilterCreate(){
-        return 0;
+        return mAudioEffectInterface.extendedFilterCreate();
     }
 
     private long delayAgnosticCreate(){
-        return 0;
+        return mAudioEffectInterface.delayAgnosticCreate();
     }
 
 }
