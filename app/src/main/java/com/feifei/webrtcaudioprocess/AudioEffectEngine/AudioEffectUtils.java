@@ -39,9 +39,9 @@ public class AudioEffectUtils {
     }
 
     public int AudioEffecInit(){
-        AudioProcessingId = audioProcessingCreate();
         ExtendedFilterId = extendedFilterCreate();
         ExtendedFilterId = delayAgnosticCreate();
+        AudioProcessingId = audioProcessingCreate();
 
         return 1;
     }
@@ -66,16 +66,16 @@ public class AudioEffectUtils {
         mVoiceActivityDetectionLevel = level;
     }
 
-    private long audioProcessingCreate(){
-        return mAudioEffectInterface.audioProcessingCreate();
-    }
-
     private long extendedFilterCreate(){
         return mAudioEffectInterface.extendedFilterCreate();
     }
 
     private long delayAgnosticCreate(){
         return mAudioEffectInterface.delayAgnosticCreate();
+    }
+
+    private long audioProcessingCreate(){
+        return mAudioEffectInterface.audioProcessingCreate();
     }
 
 }

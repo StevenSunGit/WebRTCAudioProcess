@@ -5,7 +5,7 @@ public class AudioEffectInterface {
         System.loadLibrary("");
     }
 
-    public native long audioProcessingCreate();
     public native long extendedFilterCreate();
     public native long delayAgnosticCreate();
+    public native long audioProcessingCreate();
 }
