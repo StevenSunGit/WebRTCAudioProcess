@@ -40,8 +40,8 @@ public class AudioEffectUtils {
 
     public int audioEffecInit(){
         ExtendedFilterId = extendedFilterCreate();
-        ExtendedFilterId = delayAgnosticCreate();
-        AudioProcessingId = audioProcessingCreate();
+        DelayAgnosticId = delayAgnosticCreate();
+        AudioProcessingId = audioProcessingCreate(ExtendedFilterId, DelayAgnosticId);
 
         return 1;
     }
@@ -78,7 +78,7 @@ public class AudioEffectUtils {
         return mAudioEffectInterface.delayAgnosticCreate();
     }
 
-    private long audioProcessingCreate(){
-        return mAudioEffectInterface.audioProcessingCreate();
+    private long audioProcessingCreate(long extendedFilterId, long delayAgnosticId){
+        return mAudioEffectInterface.audioProcessingCreate(extendedFilterId, delayAgnosticId);
     }
 }
