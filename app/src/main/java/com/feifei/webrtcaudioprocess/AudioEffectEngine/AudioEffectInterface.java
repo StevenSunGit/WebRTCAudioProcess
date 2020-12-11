@@ -1,4 +1,9 @@
 package com.feifei.webrtcaudioprocess.AudioEffectEngine;
 
-public interface AudioEffectInterface {
+public class AudioEffectInterface {
+    static {
+        System.loadLibrary("");
+    }
+
+    public native int AudioEffectInit();
 }

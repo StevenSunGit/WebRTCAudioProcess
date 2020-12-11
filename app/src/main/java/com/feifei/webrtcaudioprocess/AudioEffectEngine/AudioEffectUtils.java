@@ -1,10 +1,6 @@
 package com.feifei.webrtcaudioprocess.AudioEffectEngine;
 
 public class AudioEffectUtils {
-    static {
-        System.loadLibrary("");
-    }
-
     /* 采样率 */
     private int mFrequency = 0;
     /* 声道数 */

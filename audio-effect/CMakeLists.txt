@@ -9,7 +9,7 @@ link_directories(${PROJECT_SOURCE_DIR}/libs/${ANDROID_ABI}/)
 link_directories($ENV{EXTRA_LIB_DIR})
 
 #src，并存储在SRC_LIST
-aux_source_directory(src/webrtc SRC_LIST)
+aux_source_directory(src SRC_LIST)
 add_library(${PROJECT_NAME} SHARED ${SRC_LIST})
 
 
