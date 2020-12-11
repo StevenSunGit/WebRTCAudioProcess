@@ -5,6 +5,13 @@ public class AudioEffectUtils {
         System.loadLibrary("");
     }
 
+    /* 采样率 */
+    private int mFrequency = 0;
+    /* 声道数 */
+    private int mChannels = 0;
+    /* 量化位数 */
+    private int mAudioFormat = 0;
+
     private long AudioProcessingId = 0;
     private long ExtendedFilterId = 0;
     private long DelayAgnosticId = 0;
@@ -25,7 +32,11 @@ public class AudioEffectUtils {
     private boolean mVoiceActivityDetectionEnable = false;
     private int mVoiceActivityDetectionLevel = -1;
 
-    public AudioEffectUtils(){
+    public AudioEffectUtils(int frequency, int channels, int audioFormat){
+        mFrequency = frequency;
+        mChannels = channels;
+        mAudioFormat = audioFormat;
+
         AudioProcessingId = AudioProcessingCreate();
         ExtendedFilterId = ExtendedFilterCreate();
         ExtendedFilterId = DelayAgnosticCreate();
