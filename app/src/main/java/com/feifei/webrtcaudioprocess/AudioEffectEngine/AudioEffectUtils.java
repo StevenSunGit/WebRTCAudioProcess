@@ -38,12 +38,16 @@ public class AudioEffectUtils {
         mAudioEffectInterface = new AudioEffectInterface();
     }
 
-    public int AudioEffecInit(){
+    public int audioEffecInit(){
         ExtendedFilterId = extendedFilterCreate();
         ExtendedFilterId = delayAgnosticCreate();
         AudioProcessingId = audioProcessingCreate();
 
         return 1;
+    }
+
+    public int audioEffectDestroy(){
+        return mAudioEffectInterface.audioProcessingDestroy();
     }
 
     public void setNoiseSuppressionLevel(int level){
