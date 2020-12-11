@@ -8,4 +8,5 @@ public class AudioEffectInterface {
     public native long extendedFilterCreate();
     public native long delayAgnosticCreate();
     public native long audioProcessingCreate();
+    public native int audioProcessingDestroy();
 }

@@ -9,6 +9,7 @@ extern "C" {
 JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffectEngine_AudioEffectInterface_extendedFilterCreate(JNIEnv *env, jobject thiz);
 JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffectEngine_AudioEffectInterface_delayAgnosticCreate(JNIEnv *env, jobject thiz);
 JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffectEngine_AudioEffectInterface_audioProcessingCreate(JNIEnv *env, jobject thiz);
+JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffectEngine_AudioEffectInterface_audioProcessingDestroy(JNIEnv *env, jobject thiz);
 
 #ifdef __cplusplus
 }

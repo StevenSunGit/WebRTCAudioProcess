@@ -77,5 +77,4 @@ public class AudioEffectUtils {
     private long audioProcessingCreate(){
         return mAudioEffectInterface.audioProcessingCreate();
     }
-
 }

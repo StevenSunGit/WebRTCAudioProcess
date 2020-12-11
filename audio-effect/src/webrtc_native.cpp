@@ -32,3 +32,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
 extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffectEngine_AudioEffectInterface_audioProcessingCreate(JNIEnv *env, jobject thiz) {
     return 0;
 }
+
+extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffectEngine_AudioEffectInterface_audioProcessingDestroy(JNIEnv *env, jobject thiz) {
+    return 0;
+}
