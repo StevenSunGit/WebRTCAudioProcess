@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffectEngine_AudioEffectInterface_AudioEffectInit(JNIEnv *env, jobject thiz);
+JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffectEngine_AudioEffectInterface_AudioProcessingCreate(JNIEnv *env, jobject thiz);
 
 #ifdef __cplusplus
 }

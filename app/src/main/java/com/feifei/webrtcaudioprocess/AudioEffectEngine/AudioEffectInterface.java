@@ -5,5 +5,5 @@ public class AudioEffectInterface {
         System.loadLibrary("");
     }
 
-    public native int AudioEffectInit();
+    public native long AudioProcessingCreate();
 }

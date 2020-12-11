@@ -8,6 +8,8 @@ public class AudioEffectUtils {
     /* 量化位数 */
     private int mAudioFormat = 0;
 
+    /* 初始化底层接口 */
+    private AudioEffectInterface mAudioEffectInterface;
     private long AudioProcessingId = 0;
     private long ExtendedFilterId = 0;
     private long DelayAgnosticId = 0;
@@ -33,9 +35,15 @@ public class AudioEffectUtils {
         mChannels = channels;
         mAudioFormat = audioFormat;
 
+        mAudioEffectInterface = new AudioEffectInterface();
+    }
+
+    public int AudioEffecInit(){
         AudioProcessingId = AudioProcessingCreate();
         ExtendedFilterId = ExtendedFilterCreate();
         ExtendedFilterId = DelayAgnosticCreate();
+
+        return 1;
     }
 
     public void setNoiseSuppressionLevel(int level){
