@@ -6,11 +6,17 @@ public class AudioEffectUtils {
     private long DelayAgnosticId = 0;
 
     /* 噪声抑制 */
-    private NoiseSuppressionBean mNoiseSuppressionBean = null;
-    /* 回声消除 */
-    private EchoCancellationBean mEchoCancellationBean = null;
+    private boolean mNoiseSuppressionEnable = false;
+    private int mNoiseSuppressionLevel = -1;
 
-    private AutomaticGainControl mAutomaticGainControl = null;
+    /* 回声消除 */
+    private boolean mEchoCancellationEnable = false;
+    private int mEchoCancellationLevel = -1;
+
+    /* 自动增益控制 */
+    private boolean mAutomaticGainControlEnable = false;
+    private int mAutomaticGainControlMode = -1;
+
     static {
         System.loadLibrary("");
     }
@@ -19,24 +25,6 @@ public class AudioEffectUtils {
         AudioProcessingId = AudioProcessingCreate();
         ExtendedFilterId = ExtendedFilterCreate();
         ExtendedFilterId = DelayAgnosticCreate();
-    }
-
-    public void setNoiseSuppressionLevel(int level){
-        mNoiseSuppressionBean = new NoiseSuppressionBean();
-        mNoiseSuppressionBean.setEnable(true);
-        mNoiseSuppressionBean.setLevel(level);
-    }
-
-    public void setEchoCancellationBean(int level){
-        mEchoCancellationBean = new EchoCancellationBean();
-        mEchoCancellationBean.setEnable(true);
-        mEchoCancellationBean.setLevel(level);
-    }
-
-    public void setAutomaticGainControlMode(int mode){
-        mAutomaticGainControl = new AutomaticGainControl();
-        mAutomaticGainControl.setEnable(true);
-        mAutomaticGainControl.setMode(mode);
     }
 
     private long AudioProcessingCreate(){
