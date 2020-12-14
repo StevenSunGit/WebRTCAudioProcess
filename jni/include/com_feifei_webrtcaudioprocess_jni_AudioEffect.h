@@ -1,6 +1,7 @@
-#include <jni.h>
 #ifndef WEBRTC_NS_COM_EXAMPLE_WEBRTC_NS_NOISESUPPRESSION_H
 #define WEBRTC_NS_COM_EXAMPLE_WEBRTC_NS_NOISESUPPRESSION_H
+
+#include <jni.h>
 
 #ifdef __cplusplus
 extern "C" {
