@@ -7,18 +7,22 @@
 
     <Button
         android:id="@+id/ns"
+        android:text="ns"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <Button
         android:id="@+id/vad"
+        android:text="vad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <Button
         android:id="@+id/agc"
+        android:text="agc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <Button
         android:id="@+id/aec"
+        android:text="aec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 </LinearLayout>
