@@ -1,4 +1,4 @@
-package com.feifei.webrtcaudioprocess.AudioEffectEngine;
+package com.feifei.webrtcaudioprocess.AudioEffect;
 
 public class AudioEffectUtils {
     private AudioEffectInterface audioEffectInterface;
