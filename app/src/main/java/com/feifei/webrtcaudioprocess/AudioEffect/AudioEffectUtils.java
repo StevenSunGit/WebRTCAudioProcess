@@ -62,11 +62,11 @@ public class AudioEffectUtils {
         audioProcessingID = audioEffectInterface.audioProcessingCreate(extendedFilterID, delayAgnosticID, mNSLevel, mGCMode, mECLevel, mVDLikeLiHood);
     }
 
-    public void audioEffectDestroy(){
-        audioEffectInterface.audioProcessingDestroy(audioFrameID, extendedFilterID, delayAgnosticID);
-    }
-
     public int audioProcessStream(short[] audioBuffers){
         return audioEffectInterface.audioProcessStream(audioProcessingID, audioFrameID, audioBuffers);
+    }
+
+    public void audioEffectDestroy(){
+        audioEffectInterface.audioProcessingDestroy(audioFrameID, extendedFilterID, delayAgnosticID);
     }
 }

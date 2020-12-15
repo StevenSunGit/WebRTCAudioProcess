@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.feifei.webrtcaudioprocess.AudioEffect.AudioEffectUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +84,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.ns:
+                AudioEffectUtils audioEffectUtils = new AudioEffectUtils();
+                audioEffectUtils.setNoiseSuppressionLevel(2);
+                audioEffectUtils.audioEffectInit(2, 16000);
+                audioEffectUtils.audioProcessStream(null);
+                audioEffectUtils.audioEffectDestroy();
                 break;
             case R.id.vad:
                 break;
