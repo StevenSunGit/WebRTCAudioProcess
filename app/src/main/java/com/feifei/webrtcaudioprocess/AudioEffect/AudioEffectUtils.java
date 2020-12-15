@@ -3,13 +3,18 @@ package com.feifei.webrtcaudioprocess.AudioEffect;
 public class AudioEffectUtils {
     private AudioEffectInterface audioEffectInterface;
 
+    private int mSampleChannel = 0;
+    private int mSampleRate = 0;
+
     private int mNSLevel = -1;
     private int mGCMode = -1;
     private int mECLevel = -1;
     private int mVDLikeLiHood = -1;
 
+    private long audioFrameID = 0;
     private long extendedFilterID = 0;
     private long delayAgnosticID = 0;
+    private long audioProcessingID = 0;
 
     public AudioEffectUtils(){
         audioEffectInterface = new AudioEffectInterface();
@@ -50,9 +55,14 @@ public class AudioEffectUtils {
         mVDLikeLiHood = likelihood;
     }
 
-    public void AudioEffectInit(){
+    public void AudioEffectInit(int sampleChannel, int sampleRate){
+        audioFrameID = audioEffectInterface.audioFrameCreate(sampleChannel, sampleRate);
         extendedFilterID = audioEffectInterface.extendedFilterCreate();
         delayAgnosticID = audioEffectInterface.delayAgnosticCreate();
-        audioEffectInterface.audioProcessingCreate(extendedFilterID, delayAgnosticID, mNSLevel, mGCMode, mECLevel, mVDLikeLiHood);
+        audioProcessingID = audioEffectInterface.audioProcessingCreate(extendedFilterID, delayAgnosticID, mNSLevel, mGCMode, mECLevel, mVDLikeLiHood);
+    }
+
+    public void AudioEffectDestroy(){
+        audioEffectInterface.audioProcessingDestroy(audioFrameID, extendedFilterID, delayAgnosticID);
     }
 }

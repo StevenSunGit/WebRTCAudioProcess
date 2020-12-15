@@ -15,6 +15,18 @@
 #include "webrtc/common.h"
 #include "webrtc/common_audio/resampler/include/resampler.h"
 
+extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioFrameCreate(JNIEnv *env, jobject thiz, jint sampleChannel, jint sampleRate) {
+    webrtc::AudioFrame* audioFrame = new webrtc::AudioFrame();
+
+    /* 暂定送入10ms数据 */
+    float frame_step = 10;
+    audioFrame->num_channels_ = sampleChannel;
+    audioFrame->samples_per_channel_ = sampleRate * frame_step / 1000.0;
+    audioFrame->sample_rate_hz_ = sampleRate;
+
+    return (jlong)audioFrame;
+}
+
 extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_extendedFilterCreate(JNIEnv *env, jobject thiz) {
     webrtc::ExtendedFilter* extendedFilter = new webrtc::ExtendedFilter(true);
     return (jlong)extendedFilter;
@@ -118,7 +130,8 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
     return (jlong)apm;
 }
 
-extern "C" JNIEXPORT void JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessingDestroy(JNIEnv *env, jobject thiz, jlong extendedFilterID, jlong delayAgnosticID){
+extern "C" JNIEXPORT void JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessingDestroy(JNIEnv *env, jobject thiz, jlong audioFrameID, jlong extendedFilterID, jlong delayAgnosticID){
+    delete (webrtc::AudioFrame*)audioFrameID;
     delete (webrtc::ExtendedFilter*)extendedFilterID;
     delete (webrtc::DelayAgnostic*)delayAgnosticID;
 }
