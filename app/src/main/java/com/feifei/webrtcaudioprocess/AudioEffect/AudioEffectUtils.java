@@ -20,6 +20,10 @@ public class AudioEffectUtils {
         audioEffectInterface = new AudioEffectInterface();
     }
 
+    public static int getMinBufferSize(int frequency){
+        return 10 * frequency / 1000;
+    }
+
     /* NoiseSuppression噪声抑制：
         0. webrtc::NoiseSuppression::kLow
         1. webrtc::NoiseSuppression::kModerate
