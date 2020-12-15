@@ -25,7 +25,19 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
     return (jlong)delayAgnostic;
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessingCreate(JNIEnv *env, jobject thiz, jlong extended_filter_id, jlong delay_agnostic_id){
+extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessingCreate(JNIEnv *env, jobject thiz, jlong extendedFilterID, jlong delayAgnosticID){
     webrtc::AudioProcessing* apm = webrtc::AudioProcessing::Create();
-    return 0;
+    webrtc::Config config;
+    apm->level_estimator()->Enable(true);
+
+    config.Set<webrtc::ExtendedFilter>((webrtc::ExtendedFilter*)extendedFilterID);
+    config.Set<webrtc::DelayAgnostic>((webrtc::DelayAgnostic*)delayAgnosticID);
+
+    apm->SetExtraOptions(config);
+    return (jlong)apm;
+}
+
+extern "C" JNIEXPORT void JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessingDestroy(JNIEnv *env, jobject thiz, jlong extendedFilterID, jlong delayAgnosticID){
+    delete (webrtc::ExtendedFilter*)extendedFilterID;
+    delete (webrtc::DelayAgnostic*)delayAgnosticID;
 }
