@@ -28,7 +28,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := libwebrtc_apms
+LOCAL_MODULE := libaudioeffect
 
 LOCAL_MODULE_TAGS := optional
 

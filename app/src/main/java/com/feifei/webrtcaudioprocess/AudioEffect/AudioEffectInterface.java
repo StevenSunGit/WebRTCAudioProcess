@@ -2,7 +2,7 @@ package com.feifei.webrtcaudioprocess.AudioEffect;
 
 public class AudioEffectInterface {
     static {
-        System.loadLibrary("audio-effect");
+        System.loadLibrary("audioeffect");
     }
 
     public native long extendedFilterCreate();
