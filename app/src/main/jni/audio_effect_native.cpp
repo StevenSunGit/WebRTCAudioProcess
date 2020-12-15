@@ -80,7 +80,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
     if(ec != -1){
         /* delay_ms需要调试 */
         int delay_ms = 0;
-        
+
         apm->echo_cancellation()->Enable(true);
         apm->echo_cancellation()->enable_metrics(true);
         apm->echo_cancellation()->enable_delay_logging(true);

@@ -30,7 +30,7 @@ public class AudioEffectUtils {
         1. webrtc::GainControl::kAdaptiveDigital
         2. webrtc::GainControl::kFixedDigital
     */
-    private void setGainControlMode(int mode){
+    public void setGainControlMode(int mode){
         mGCMode = mode;
     }
 
@@ -39,14 +39,14 @@ public class AudioEffectUtils {
         1. webrtc::EchoCancellation::kModerateSuppression
         2. webrtc::EchoCancellation::kHighSuppression
     */
-    private void setEchoCancellationLevel(int level){
+    public void setEchoCancellationLevel(int level){
         mECLevel = level;
     }
 
     /* VoiceDetection语音活动检测：
         0. webrtc::VoiceDetection::kVeryLowLikelihood
     */
-    private void setVoiceDetectionLikeLiHood(int likelihood){
+    public void setVoiceDetectionLikeLiHood(int likelihood){
         mVDLikeLiHood = likelihood;
     }
 
