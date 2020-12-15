@@ -55,14 +55,18 @@ public class AudioEffectUtils {
         mVDLikeLiHood = likelihood;
     }
 
-    public void AudioEffectInit(int sampleChannel, int sampleRate){
+    public void audioEffectInit(int sampleChannel, int sampleRate){
         audioFrameID = audioEffectInterface.audioFrameCreate(sampleChannel, sampleRate);
         extendedFilterID = audioEffectInterface.extendedFilterCreate();
         delayAgnosticID = audioEffectInterface.delayAgnosticCreate();
         audioProcessingID = audioEffectInterface.audioProcessingCreate(extendedFilterID, delayAgnosticID, mNSLevel, mGCMode, mECLevel, mVDLikeLiHood);
     }
 
-    public void AudioEffectDestroy(){
+    public void audioEffectDestroy(){
         audioEffectInterface.audioProcessingDestroy(audioFrameID, extendedFilterID, delayAgnosticID);
+    }
+
+    public int audioProcessStream(short[] audioBuffers){
+        return audioEffectInterface.audioProcessStream(audioProcessingID, audioFrameID, audioBuffers);
     }
 }
