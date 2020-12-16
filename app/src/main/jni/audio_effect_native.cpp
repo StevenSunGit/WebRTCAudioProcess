@@ -42,6 +42,11 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
     webrtc::Config config;
     apm->level_estimator()->Enable(true);
 
+	apm->echo_cancellation()->Enable(true);
+    apm->echo_cancellation()->enable_metrics(true);
+    apm->echo_cancellation()->enable_delay_logging(true);
+	apm->set_stream_delay_ms(0);
+
     config.Set<webrtc::ExtendedFilter>((webrtc::ExtendedFilter*)extendedFilterID);
     config.Set<webrtc::DelayAgnostic>((webrtc::DelayAgnostic*)delayAgnosticID);
 
@@ -90,14 +95,6 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
 
     /* EchoCancellation回声消除 */
     if(ec != -1){
-        /* delay_ms需要调试 */
-        int delay_ms = 0;
-
-        apm->echo_cancellation()->Enable(true);
-        apm->echo_cancellation()->enable_metrics(true);
-        apm->echo_cancellation()->enable_delay_logging(true);
-        apm->set_stream_delay_ms(delay_ms);
-
         apm->echo_cancellation()->enable_drift_compensation(true);
         apm->echo_cancellation()->set_suppression_level(webrtc::EchoCancellation::kHighSuppression);
 
