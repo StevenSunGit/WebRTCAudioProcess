@@ -126,7 +126,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
                 break;
 		}
     }
-
+    apm->Initialize();
     return (jlong)apm;
 }
 
