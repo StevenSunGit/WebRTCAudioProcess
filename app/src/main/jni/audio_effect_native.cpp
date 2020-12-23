@@ -55,6 +55,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
 
     /* NoiseSuppression噪声抑制 */
     if(ns != -1){
+        ALOGI("ns set level: %d", ns);
         apm->noise_suppression()->Enable(true);
         switch (ns) {
         case 0:
@@ -76,6 +77,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
 
     /* GainControl增益控制 */
     if(gc != -1){
+        ALOGI("gc set mode: %d", gc);
         apm->gain_control()->Enable(true);
         apm->gain_control()->set_analog_level_limits(0, 255);
         switch (gc) {
@@ -95,9 +97,9 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
 
     /* EchoCancellation回声消除 */
     if(ec != -1){
+        ALOGI("gc set level: %d", ec);
         apm->echo_cancellation()->enable_drift_compensation(true);
         apm->echo_cancellation()->set_suppression_level(webrtc::EchoCancellation::kHighSuppression);
-
         switch (ec) {
             case 0:
                 apm->echo_cancellation()->set_suppression_level(webrtc::EchoCancellation::kLowSuppression);
@@ -114,6 +116,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
 
     /* VoiceDetection语音活动检测 */
     if(vd != -1){
+        ALOGI("vd set mode: %d", vd);
 		switch(vd){
 			case 0:
 				apm->voice_detection()->set_likelihood(webrtc::VoiceDetection::kVeryLowLikelihood);
