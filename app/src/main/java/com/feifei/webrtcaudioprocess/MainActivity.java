@@ -99,8 +99,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     try {
                         /* 消噪前文件夹 */
                         File inFiles = new File(root + File.separator + "inFiles");
+                        inFiles.mkdirs();
                         /* 消噪后文件夹 */
                         File outFiles = new File(root + File.separator + "outFiles");
+                        outFiles.mkdirs();
 
                         AudioEffectUtils audioEffectUtils = new AudioEffectUtils();
                         audioEffectUtils.setNoiseSuppressionLevel(2);
