@@ -1,6 +1,8 @@
 package com.feifei.webrtcaudioprocess.AudioEffect;
 
 public class AudioEffectUtils {
+    private  static String TAG = "AudioEffectUtils";
+
     private AudioEffectInterface audioEffectInterface;
 
     private int mSampleChannel = 0;
