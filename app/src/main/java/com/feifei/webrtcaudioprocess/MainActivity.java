@@ -106,9 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         audioEffectUtils.setNoiseSuppressionLevel(2);
                         audioEffectUtils.audioEffectInit(2, 16000);
 
-
                         int minBufferSize = AudioEffectUtils.getMinBufferInByte(16000);
-
                         short[] datashort = new short[minBufferSize/2];
                         byte[] databyte = new byte[minBufferSize];
 
