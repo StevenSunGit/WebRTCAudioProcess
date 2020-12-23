@@ -107,10 +107,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         audioEffectUtils.audioEffectInit(2, 16000);
 
 
-                        int minBufferSize = AudioEffectUtils.getMinBufferSize(16000);
+                        int minBufferSize = AudioEffectUtils.getMinBufferInByte(16000);
 
-                        short[] datashort = new short[minBufferSize];
-                        byte[] databyte = new byte[minBufferSize * 2];
+                        short[] datashort = new short[minBufferSize/2];
+                        byte[] databyte = new byte[minBufferSize];
 
                         for (File inFile : inFiles.listFiles()){
                             InputStream inputStream = new FileInputStream(inFile);

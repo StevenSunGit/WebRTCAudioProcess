@@ -20,8 +20,8 @@ public class AudioEffectUtils {
         audioEffectInterface = new AudioEffectInterface();
     }
 
-    public static int getMinBufferSize(int frequency){
-        return 10 * frequency / 1000;
+    public static int getMinBufferInByte(int frequency){
+        return 10 * frequency / 1000 * 16 / 8;
     }
 
     /* NoiseSuppression噪声抑制：
