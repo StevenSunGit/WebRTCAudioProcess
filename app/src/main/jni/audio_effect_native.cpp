@@ -137,9 +137,6 @@ extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect
 
     std::copy(buffers, buffers + audioFrame->samples_per_channel_, audioFrame->data_);
     int ret = apm->ProcessReverseStream(audioFrame);
-    std::copy(audioFrame->data_, audioFrame->data_ + audioFrame->samples_per_channel_, buffers);
-
-    env->ReleaseShortArrayElements(audioBuffers, buffers, 0);
 
     return ret;
 }
