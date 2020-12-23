@@ -130,6 +130,20 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
     return (jlong)apm;
 }
 
+extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessReverseStream(JNIEnv *env, jobject thiz, jlong audioProcessingID, jlong audioFrameID, jshortArray audioBuffers){
+    webrtc::AudioProcessing* apm = (webrtc::AudioProcessing*)audioProcessingID;
+    webrtc::AudioFrame* audioFrame = (webrtc::AudioFrame*)audioFrameID;
+    jshort *buffers = env->GetShortArrayElements(audioBuffers, nullptr);
+
+    std::copy(buffers, buffers + audioFrame->samples_per_channel_, audioFrame->data_);
+    int ret = apm->ProcessReverseStream(audioFrame);
+    std::copy(audioFrame->data_, audioFrame->data_ + audioFrame->samples_per_channel_, buffers);
+
+    env->ReleaseShortArrayElements(audioBuffers, buffers, 0);
+
+    return ret;
+}
+
 extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessStream(JNIEnv *env, jobject thiz, jlong audioProcessingID, jlong audioFrameID, jshortArray audioBuffers){
     webrtc::AudioProcessing* apm = (webrtc::AudioProcessing*)audioProcessingID;
     webrtc::AudioFrame* audioFrame = (webrtc::AudioFrame*)audioFrameID;

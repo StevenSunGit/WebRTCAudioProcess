@@ -66,6 +66,10 @@ public class AudioEffectUtils {
         audioProcessingID = audioEffectInterface.audioProcessingCreate(extendedFilterID, delayAgnosticID, mNSLevel, mGCMode, mECLevel, mVDLikeLiHood);
     }
 
+    public int audioProcessReverseStream(short[] audioBuffers){
+        return audioEffectInterface.audioProcessReverseStream(audioProcessingID, audioFrameID, audioBuffers);
+    }
+
     public int audioProcessStream(short[] audioBuffers){
         return audioEffectInterface.audioProcessStream(audioProcessingID, audioFrameID, audioBuffers);
     }
