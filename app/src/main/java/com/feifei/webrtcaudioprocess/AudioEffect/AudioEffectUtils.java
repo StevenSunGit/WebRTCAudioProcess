@@ -13,7 +13,8 @@ public class AudioEffectUtils {
     private int mECLevel = -1;
     private int mVDLikeLiHood = -1;
 
-    private long audioFrameID = 0;
+    private long audioNeareFrameID = 0;
+    private long audioFareFrameID = 0;
     private long extendedFilterID = 0;
     private long delayAgnosticID = 0;
     private long audioProcessingID = 0;
@@ -62,21 +63,20 @@ public class AudioEffectUtils {
     }
 
     public void audioEffectInit(int sampleChannel, int sampleRate){
-        audioFrameID = audioEffectInterface.audioFrameCreate(sampleChannel, sampleRate);
-        extendedFilterID = audioEffectInterface.extendedFilterCreate();
-        delayAgnosticID = audioEffectInterface.delayAgnosticCreate();
-        audioProcessingID = audioEffectInterface.audioProcessingCreate(extendedFilterID, delayAgnosticID, mNSLevel, mGCMode, mECLevel, mVDLikeLiHood);
+        audioNeareFrameID = audioEffectInterface.audioNearFrameCreate(sampleChannel, sampleRate);
+        audioFareFrameID = audioEffectInterface.audioFarFrameCreate(sampleChannel, sampleRate);
+        audioProcessingID = audioEffectInterface.audioProcessingCreate(audioNeareFrameID, audioFareFrameID, mNSLevel, mGCMode, mECLevel, mVDLikeLiHood);
     }
 
     public int audioProcessReverseStream(short[] audioBuffers){
-        return audioEffectInterface.audioProcessReverseStream(audioProcessingID, audioFrameID, audioBuffers);
+        return audioEffectInterface.audioProcessReverseStream(audioProcessingID, audioNeareFrameID, audioBuffers);
     }
 
     public int audioProcessStream(short[] audioBuffers){
-        return audioEffectInterface.audioProcessStream(audioProcessingID, audioFrameID, audioBuffers);
+        return audioEffectInterface.audioProcessStream(audioProcessingID, audioNeareFrameID, audioBuffers);
     }
 
     public void audioEffectDestroy(){
-        audioEffectInterface.audioProcessingDestroy(audioFrameID, extendedFilterID, delayAgnosticID);
+        audioEffectInterface.audioProcessingDestroy(audioNeareFrameID, extendedFilterID, delayAgnosticID);
     }
 }

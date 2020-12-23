@@ -15,7 +15,7 @@
 #include "webrtc/common.h"
 #include "webrtc/common_audio/resampler/include/resampler.h"
 
-extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioFrameCreate(JNIEnv *env, jobject thiz, jint sampleChannel, jint sampleRate) {
+extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioNearFrameCreate(JNIEnv *env, jobject thiz, jint sampleChannel, jint sampleRate) {
     webrtc::AudioFrame* audioFrame = new webrtc::AudioFrame();
 
     /* 暂定送入10ms数据 */
@@ -27,31 +27,28 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
     return (jlong)audioFrame;
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_extendedFilterCreate(JNIEnv *env, jobject thiz) {
-    webrtc::ExtendedFilter* extendedFilter = new webrtc::ExtendedFilter(true);
-    return (jlong)extendedFilter;
+extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioFarFrameCreate(JNIEnv *env, jobject thiz, jint sampleChannel, jint sampleRate) {
+    webrtc::AudioFrame* audioFrame = new webrtc::AudioFrame();
+
+    /* 暂定送入10ms数据 */
+    float frame_step = 10;
+    audioFrame->num_channels_ = sampleChannel;
+    audioFrame->samples_per_channel_ = sampleRate * frame_step / 1000.0;
+    audioFrame->sample_rate_hz_ = sampleRate;
+
+    return (jlong)audioFrame;
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_delayAgnosticCreate(JNIEnv *env, jobject thiz) {
-    webrtc::DelayAgnostic* delayAgnostic = new webrtc::DelayAgnostic(true);
-    return (jlong)delayAgnostic;
-}
-
-extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessingCreate(JNIEnv *env, jobject thiz, jlong extendedFilterID, jlong delayAgnosticID, jint ns, jint gc, jint ec, jint vd){
-    webrtc::AudioProcessing* apm = webrtc::AudioProcessing::Create();
+extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessingCreate(JNIEnv *env, jobject thiz, jlong nearFrameID, jlong farFrameID, jint ns, jint gc, jint ec, jint vd){
     webrtc::Config config;
-    apm->level_estimator()->Enable(true);
+    config.Set<webrtc::ExtendedFilter>(new webrtc::ExtendedFilter(true));
+    config.Set<webrtc::Intelligibility>(new webrtc::Intelligibility(true));
+    config.Set<webrtc::DelayAgnostic>(new webrtc::DelayAgnostic(true));
+    config.Set<webrtc::NextGenerationAec>(new webrtc::NextGenerationAec(true));
+    config.Set<webrtc::ExperimentalNs>(new webrtc::ExperimentalNs(true));
+    config.Set<webrtc::ExperimentalAgc>(new webrtc::ExperimentalAgc(true));
 
-	apm->echo_cancellation()->Enable(true);
-    apm->echo_cancellation()->enable_metrics(true);
-    apm->echo_cancellation()->enable_delay_logging(true);
-	apm->set_stream_delay_ms(0);
-
-    config.Set<webrtc::ExtendedFilter>((webrtc::ExtendedFilter*)extendedFilterID);
-    config.Set<webrtc::DelayAgnostic>((webrtc::DelayAgnostic*)delayAgnosticID);
-
-    apm->SetExtraOptions(config);
-    apm->high_pass_filter()->Enable(true);
+    webrtc::AudioProcessing* apm = webrtc::AudioProcessing::Create(config);
 
     /* NoiseSuppression噪声抑制 */
     if(ns != -1){
