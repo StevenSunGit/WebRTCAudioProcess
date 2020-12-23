@@ -49,6 +49,10 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
     config.Set<webrtc::ExperimentalAgc>(new webrtc::ExperimentalAgc(true));
 
     webrtc::AudioProcessing* apm = webrtc::AudioProcessing::Create(config);
+    apm->Initialize({{{((webrtc::AudioFrame*)nearFrameID)->sample_rate_hz_, ((webrtc::AudioFrame*)nearFrameID)->num_channels_},
+                     {((webrtc::AudioFrame*)nearFrameID)->sample_rate_hz_, ((webrtc::AudioFrame*)nearFrameID)->num_channels_},
+                     {((webrtc::AudioFrame*)farFrameID)->sample_rate_hz_, ((webrtc::AudioFrame*)farFrameID)->num_channels_},
+                     {((webrtc::AudioFrame*)farFrameID)->sample_rate_hz_, ((webrtc::AudioFrame*)farFrameID)->num_channels_}}});
 
     /* NoiseSuppression噪声抑制 */
     if(ns != -1){
