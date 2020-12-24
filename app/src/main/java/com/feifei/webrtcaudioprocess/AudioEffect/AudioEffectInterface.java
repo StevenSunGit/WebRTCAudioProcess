@@ -9,6 +9,8 @@ public class AudioEffectInterface {
     public native long audioFarFrameCreate(int sampleChannel, int sampleRate);
     public native long audioProcessingCreate(long nearFrameID, long farFrameID);
 
+    public native int setStreamDelayMs(int time);
+
     public native int setHighPassFilterParameter(long audioProcessingID, boolean enbale);
     public native int setNoiseSuppressionParameter(long audioProcessingID, int level);
     public native int setGainControlParameter(long audioProcessingID, int targetLevel, int compressionGrain, int mode);
