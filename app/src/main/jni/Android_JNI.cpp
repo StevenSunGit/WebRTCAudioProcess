@@ -59,9 +59,10 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
     return (jlong)apm;
 }
 
-extern "C" JNIEXPORT void JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessingDestroy(JNIEnv *env, jobject thiz, jlong nearFrameID, jlong farFrameID){
+extern "C" JNIEXPORT void JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessingDestroy(JNIEnv *env, jobject thiz, jlong audioProcessingID, jlong nearFrameID, jlong farFrameID){
+    delete (webrtc::AudioProcessing*)audioProcessingID;
     delete (webrtc::AudioFrame*)nearFrameID;
-    delete (webrtc::ExtendedFilter*)farFrameID;
+    delete (webrtc::AudioFrame*)farFrameID;
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_setStreamDelayMs(JNIEnv *env, jobject thiz, jlong audioProcessingID, jint time){
