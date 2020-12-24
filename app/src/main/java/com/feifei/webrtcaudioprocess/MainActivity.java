@@ -117,13 +117,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         outFiles.mkdirs();
 
                         AudioResampleUtils audioResampleUtils = new AudioResampleUtils();
-                        audioResampleUtils.audioResampleInit(16000, 41100, 2);
+                        audioResampleUtils.audioResampleInit(41100, 16000, 2);
 
-                        int inMinBufferSize = AudioResampleUtils.get10msBufferInByte(16000, 16);
+                        int inMinBufferSize = AudioResampleUtils.get10msBufferInByte(41100, 16);
                         short[] inDatashort = new short[inMinBufferSize/2];
                         byte[] inDatabyte = new byte[inMinBufferSize];
 
-                        int outMinBufferSize = AudioResampleUtils.get10msBufferInByte(41100, 16);
+                        int outMinBufferSize = AudioResampleUtils.get10msBufferInByte(16000, 16);
                         short[] outDatashort = new short[outMinBufferSize/2];
                         byte[] outDatabyte = new byte[outMinBufferSize];
 

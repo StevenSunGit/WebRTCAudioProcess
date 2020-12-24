@@ -16,7 +16,7 @@ public class AudioResampleUtils {
     }
 
     public static int get10msBufferInByte(int frequency, int audioFormat){
-        return 10 * frequency / 1000 * audioFormat / 8;
+        return 80 * frequency / 1000 * audioFormat / 8;
     }
 
     public int audioResampleInit(int inFreq, int outFreq, int channel){
@@ -29,7 +29,7 @@ public class AudioResampleUtils {
     }
 
     public int audioResamplePush(short[] inputBuffer, int inLength, short[] outputBuffer, int outputLength){
-        return mAudioResampleInterface.audioResamplePush(audioResampleID, inputBuffer, inLength, outputBuffer, outputLength, outputLength);
+        return mAudioResampleInterface.audioResamplePush(audioResampleID, inputBuffer, inLength, outputBuffer, outputLength, 16000/44100);
     }
 
     public void audioResampleDestroy(){
