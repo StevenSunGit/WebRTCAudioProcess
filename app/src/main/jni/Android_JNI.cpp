@@ -57,6 +57,11 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
     return (jlong)apm;
 }
 
+extern "C" JNIEXPORT void JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessingDestroy(JNIEnv *env, jobject thiz, jlong nearFrameID, jlong farFrameID){
+    delete (webrtc::AudioFrame*)nearFrameID;
+    delete (webrtc::ExtendedFilter*)farFrameID;
+}
+
 extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_setStreamDelayMs(JNIEnv *env, jobject thiz, jlong audioProcessingID, jint time){
     webrtc::AudioProcessing* apm = (webrtc::AudioProcessing*)audioProcessingID;
     return apm->set_stream_delay_ms(time);
@@ -210,9 +215,4 @@ extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect
 extern "C" JNIEXPORT jboolean JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioHasVoice(JNIEnv *env, jobject thiz, jlong audioProcessingID){
     webrtc::AudioProcessing* apm = (webrtc::AudioProcessing*)audioProcessingID;
     return apm->voice_detection()->stream_has_voice();
-}
-
-extern "C" JNIEXPORT void JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessingDestroy(JNIEnv *env, jobject thiz, jlong nearFrameID, jlong farFrameID){
-    delete (webrtc::AudioFrame*)nearFrameID;
-    delete (webrtc::ExtendedFilter*)farFrameID;
 }

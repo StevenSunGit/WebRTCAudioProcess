@@ -43,7 +43,7 @@ LOCAL_CFLAGS += -DWEBRTC_POSIX
 
 LOCAL_C_INCLUDES := $(JNI_PATH)
 
-LOCAL_SRC_FILES := $(JNI_PATH)/audio_effect_native.cpp
+LOCAL_SRC_FILES := $(JNI_PATH)/Android_JNI.cpp
 
 
 LOCAL_WHOLE_STATIC_LIBRARIES := libwebrtc_aec \
