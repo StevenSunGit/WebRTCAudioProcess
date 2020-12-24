@@ -23,4 +23,20 @@ public class AudioResampleUtils {
         audioResampleID = mAudioResampleInterface.audioResampleInit(intputFrequency, outputFrequency, channels);
         return 1;
     }
+
+    public int audioResamplePush(short[] inputBuffer, int inLength, short[] outputBuffer, int outputLength){
+        return mAudioResampleInterface.audioResamplePush(audioResampleID, inputBuffer, inLength, outputBuffer, outputLength, outputLength);
+    }
+
+    public void audioResampleDestroy(){
+        mAudioResampleInterface.audioResampleDestroy(audioResampleID);
+    }
+
+    public int audioResampleReset(int inFreq, int outFreq, int channels){
+       return mAudioResampleInterface.audioResampleReset(audioResampleID, inFreq, outFreq, channels);
+    }
+
+    public int audioResampleResetIfNeeded(int inFreq, int outFreq, int channels){
+        return mAudioResampleInterface.audioResampleResetIfNeeded(audioResampleID, inFreq, outFreq, channels);
+    }
 }
