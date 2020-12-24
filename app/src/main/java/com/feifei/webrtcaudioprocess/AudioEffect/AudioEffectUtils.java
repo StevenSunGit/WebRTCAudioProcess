@@ -28,6 +28,11 @@ public class AudioEffectUtils {
         mAudioProcessingID = mAudioEffectInterface.audioProcessingCreate(mAudioNeareFrameID, mAudioFarFrameID);
     }
 
+    public void audioEffectDestroy(){
+        mAudioEffectInterface.audioProcessingDestroy(mAudioProcessingID, mAudioNeareFrameID, mAudioFarFrameID);
+    }
+
+
     /* HighPassFilter高通滤波器 */
     public int setHighPassFilterParameter(boolean enable){
         return mAudioEffectInterface.setHighPassFilterParameter(mAudioProcessingID, enable);
@@ -94,7 +99,7 @@ public class AudioEffectUtils {
         return mAudioEffectInterface.audioProcessStream(mAudioProcessingID, mAudioFarFrameID, audioBuffers);
     }
 
-    public void audioEffectDestroy(){
-        mAudioEffectInterface.audioProcessingDestroy(mAudioProcessingID, mAudioNeareFrameID, mAudioFarFrameID);
+    public boolean audioHasVoice(){
+        return mAudioEffectInterface.audioHasVoice(mAudioProcessingID);
     }
 }

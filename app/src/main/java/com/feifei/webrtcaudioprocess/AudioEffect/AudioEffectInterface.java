@@ -21,4 +21,5 @@ public class AudioEffectInterface {
 
     public native int audioProcessStream(long audioProcessingID, long nearFrameID, short[] audioBuffers);
     public native int audioProcessReverseStream(long audioProcessingID, long farFrameID, short[] audioBuffers);
+    public native boolean audioHasVoice(long audioProcessingID);
 }

@@ -197,6 +197,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
                 break;
             case R.id.vad:
+                ExecutorService vadExecutor = Executors.newSingleThreadExecutor();
+                vadExecutor.execute(()->{
+                    try {
+                        /* ns前文件夹 */
+                        File inFiles = new File(root + File.separator + "inFiles");
+                        inFiles.mkdirs();
+                        /* ns后文件夹 */
+                        File outFiles = new File(root + File.separator + "outFiles");
+                        outFiles.mkdirs();
+
+                        AudioEffectUtils audioEffectUtils = new AudioEffectUtils();
+                        audioEffectUtils.audioEffectInit(2, 16000);
+                        audioEffectUtils.setVoiceDetectionLikeLiHood(0);
+
+                        int minBufferSize = AudioEffectUtils.get10msBufferInByte(16000, 16);
+                        short[] datashort = new short[minBufferSize/2];
+                        byte[] databyte = new byte[minBufferSize];
+
+                        for (File inFile : inFiles.listFiles()){
+                            InputStream inputStream = new FileInputStream(inFile);
+
+                            int ret = 0;
+                            while ((ret = inputStream.read(databyte)) > 0){
+                                /*字节转化*/
+                                ByteBuffer.wrap(databyte).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(datashort);
+
+                                /*送入模型*/
+                                audioEffectUtils.audioProcessStream(datashort);
+                                boolean isVoice = audioEffectUtils.audioHasVoice();
+                                Log.d(TAG, "finish vad test: " + isVoice);
+                            }
+                        }
+
+                    }catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
                 break;
             case R.id.agc:
                 break;
