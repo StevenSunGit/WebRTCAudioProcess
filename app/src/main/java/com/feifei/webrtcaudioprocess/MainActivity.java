@@ -328,6 +328,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
                 break;
             case R.id.aecm:
+                ExecutorService aecmExecutor = Executors.newSingleThreadExecutor();
+                aecmExecutor.execute(()->{
+                    try {
+                        /* aecm前文件夹 */
+                        File inFiles = new File(root + File.separator + "inFiles");
+                        inFiles.mkdirs();
+                        /* aecm后文件夹 */
+                        File outFiles = new File(root + File.separator + "outFiles");
+                        outFiles.mkdirs();
+
+                        AudioEffectUtils audioEffectUtils = new AudioEffectUtils();
+                        audioEffectUtils.audioEffectInit(2, 16000);
+                        audioEffectUtils.setEchoCancellationMobileParameter(1);
+
+                        int minBufferSize = AudioEffectUtils.get10msBufferInByte(16000, 16);
+                        short[] datashort = new short[minBufferSize/2];
+                        byte[] databyte = new byte[minBufferSize];
+
+                        for (File inFile : inFiles.listFiles()){
+                            InputStream inputStream = new FileInputStream(inFile);
+                            OutputStream outputStream = new FileOutputStream(outFiles.getAbsolutePath() + File.separator + inFile.getName());
+
+                            int ret = 0;
+                            while ((ret = inputStream.read(databyte)) > 0){
+                                /*字节转化*/
+                                ByteBuffer.wrap(databyte).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(datashort);
+
+                                /*送入模型*/
+                                audioEffectUtils.audioProcessReverseStream(datashort);
+                                audioEffectUtils.audioProcessStream(datashort);
+
+                                /* 保存消噪效果 */
+                                ByteBuffer.wrap(databyte).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().put(datashort);
+                                outputStream.write(databyte);
+                                outputStream.flush();
+                            }
+                        }
+                        audioEffectUtils.audioEffectDestroy();
+                        Log.d(TAG, "finish aecm test");
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
                 break;
             default:
                 break;
