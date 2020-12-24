@@ -16,15 +16,15 @@
 extern "C" {
 #endif
 
-JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioResampleInit(JNIEnv *env, jobject thiz, jint inFreq, jint outFreq, jint channels);
+JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioResample_AudioResampleInterface_audioResampleInit(JNIEnv *env, jobject thiz, jint inFreq, jint outFreq, jint channels);
 
-JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioResampleReset(JNIEnv *env, jobject thiz, jlong audioResampleID, jint inFreq, jint outFreq, jint channels);
+JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioResample_AudioResampleInterface_audioResampleReset(JNIEnv *env, jobject thiz, jlong audioResampleID, jint inFreq, jint outFreq, jint channels);
 
-JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioResampleResetIfNeeded(JNIEnv *env, jobject thiz, jlong audioResampleID, jint inFreq, jint outFreq, jint channels);
+JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioResample_AudioResampleInterface_audioResampleResetIfNeeded(JNIEnv *env, jobject thiz, jlong audioResampleID, jint inFreq, jint outFreq, jint channels);
 
-JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioResamplePush(JNIEnv *env, jobject thiz, jlong audioResampleID, jshortArray inputBuffer, jint inLength, jshortArray outputBuffer, jint maxLength, jint outputLength);
+JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioResample_AudioResampleInterface_audioResamplePush(JNIEnv *env, jobject thiz, jlong audioResampleID, jshortArray inputBuffer, jint inLength, jshortArray outputBuffer, jint maxLength, jint outputLength);
 
-JNIEXPORT void JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioResampleDestroy(JNIEnv *env, jobject thiz, jlong audioResampleID);
+JNIEXPORT void JNICALL Java_com_feifei_webrtcaudioprocess_AudioResample_AudioResampleInterface_audioResampleDestroy(JNIEnv *env, jobject thiz, jlong audioResampleID);
 
 #ifdef __cplusplus
 }
