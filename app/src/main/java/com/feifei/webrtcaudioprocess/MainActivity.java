@@ -200,12 +200,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ExecutorService vadExecutor = Executors.newSingleThreadExecutor();
                 vadExecutor.execute(()->{
                     try {
-                        /* ns前文件夹 */
+                        /* vad前文件夹 */
                         File inFiles = new File(root + File.separator + "inFiles");
                         inFiles.mkdirs();
-                        /* ns后文件夹 */
-                        File outFiles = new File(root + File.separator + "outFiles");
-                        outFiles.mkdirs();
 
                         AudioEffectUtils audioEffectUtils = new AudioEffectUtils();
                         audioEffectUtils.audioEffectInit(2, 16000);
@@ -226,10 +223,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 /*送入模型*/
                                 audioEffectUtils.audioProcessStream(datashort);
                                 boolean isVoice = audioEffectUtils.audioHasVoice();
-                                Log.d(TAG, "finish vad test: " + isVoice);
+                                Log.d(TAG, "vad test: " + isVoice);
                             }
                         }
-
+                        audioEffectUtils.audioEffectDestroy();
                     }catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
@@ -238,6 +235,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
                 break;
             case R.id.agc:
+                ExecutorService agcExecutor = Executors.newSingleThreadExecutor();
+                agcExecutor.execute(()->{
+                    try {
+                        /* agc前文件夹 */
+                        File inFiles = new File(root + File.separator + "inFiles");
+                        inFiles.mkdirs();
+                        /* agc后文件夹 */
+                        File outFiles = new File(root + File.separator + "outFiles");
+                        outFiles.mkdirs();
+
+                        AudioEffectUtils audioEffectUtils = new AudioEffectUtils();
+                        audioEffectUtils.audioEffectInit(2, 16000);
+                        audioEffectUtils.setGainControlParameter(6, 9, 1);
+
+                        int minBufferSize = AudioEffectUtils.get10msBufferInByte(16000, 16);
+                        short[] datashort = new short[minBufferSize/2];
+                        byte[] databyte = new byte[minBufferSize];
+
+                        for (File inFile : inFiles.listFiles()){
+                            InputStream inputStream = new FileInputStream(inFile);
+                            OutputStream outputStream = new FileOutputStream(outFiles.getAbsolutePath() + File.separator + inFile.getName());
+
+                            int ret = 0;
+                            while ((ret = inputStream.read(databyte)) > 0){
+                                /*字节转化*/
+                                ByteBuffer.wrap(databyte).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(datashort);
+
+                                /*送入模型*/
+                                audioEffectUtils.audioProcessStream(datashort);
+
+                                /* 保存消噪效果 */
+                                ByteBuffer.wrap(databyte).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().put(datashort);
+                                outputStream.write(databyte);
+                                outputStream.flush();
+                            }
+                        }
+                        audioEffectUtils.audioEffectDestroy();
+                        Log.d(TAG, "finish agc test");
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
                 break;
             case R.id.aec:
                 break;
