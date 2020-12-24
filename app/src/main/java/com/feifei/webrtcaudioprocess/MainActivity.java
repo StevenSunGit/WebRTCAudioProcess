@@ -119,12 +119,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         AudioResampleUtils audioResampleUtils = new AudioResampleUtils();
                         audioResampleUtils.audioResampleInit(16000, 41100, 2);
 
-                        int minBufferSize = AudioEffectUtils.get10msBufferInByte(16000, 16);
-                        short[] inDatashort = new short[minBufferSize/2];
-                        short[] outDatashort = new short[minBufferSize/2];
+                        int inMinBufferSize = AudioResampleUtils.get10msBufferInByte(16000, 16);
+                        short[] inDatashort = new short[inMinBufferSize/2];
+                        byte[] inDatabyte = new byte[inMinBufferSize];
 
-                        byte[] inDatabyte = new byte[minBufferSize];
-                        byte[] outDatabyte = new byte[minBufferSize];
+                        int outMinBufferSize = AudioResampleUtils.get10msBufferInByte(41100, 16);
+                        short[] outDatashort = new short[outMinBufferSize/2];
+                        byte[] outDatabyte = new byte[outMinBufferSize];
 
                         for (File inFile : inFiles.listFiles()){
                             InputStream inputStream = new FileInputStream(inFile);
@@ -136,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 ByteBuffer.wrap(inDatabyte).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(inDatashort);
 
                                 /*送入模型*/
-                                audioResampleUtils.audioResamplePush(inDatashort, ret/2, outDatashort, ret/2);
+                                audioResampleUtils.audioResamplePush(inDatashort, inMinBufferSize, outDatashort, outMinBufferSize);
 
                                 /* 保存消噪效果 */
                                 ByteBuffer.wrap(outDatabyte).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().put(outDatashort);
@@ -146,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
 
                         audioResampleUtils.audioResampleDestroy();
+                        Log.d(TAG, "finish resample test");
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException e) {

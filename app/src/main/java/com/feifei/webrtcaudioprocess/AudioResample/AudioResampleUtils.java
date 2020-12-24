@@ -15,6 +15,10 @@ public class AudioResampleUtils {
         mAudioResampleInterface = new AudioResampleInterface();
     }
 
+    public static int get10msBufferInByte(int frequency, int audioFormat){
+        return 10 * frequency / 1000 * audioFormat / 8;
+    }
+
     public int audioResampleInit(int inFreq, int outFreq, int channel){
         intputFrequency = inFreq;
         outputFrequency = outFreq;
