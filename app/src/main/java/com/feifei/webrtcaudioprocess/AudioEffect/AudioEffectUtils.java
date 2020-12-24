@@ -32,6 +32,9 @@ public class AudioEffectUtils {
         mAudioEffectInterface.audioProcessingDestroy(mAudioProcessingID, mAudioNeareFrameID, mAudioFarFrameID);
     }
 
+    public int setStreamDelayMs(int time){
+        return mAudioEffectInterface.setStreamDelayMs(time);
+    }
 
     /* HighPassFilter高通滤波器 */
     public int setHighPassFilterParameter(boolean enable){
