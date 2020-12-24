@@ -2,7 +2,7 @@ package com.feifei.webrtcaudioprocess.AudioEffect;
 
 public class AudioEffectInterface {
     static {
-        System.loadLibrary("audioeffect");
+        System.loadLibrary("audioprocess");
     }
 
     public native long audioNearFrameCreate(int sampleChannel, int sampleRate);

@@ -28,7 +28,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := libaudioeffect
+LOCAL_MODULE := libaudioprocess
 
 LOCAL_MODULE_TAGS := optional
 

@@ -1,5 +1,7 @@
 #include <android/log.h>
+
 #include "include/com_feifei_webrtcaudioprocess_jni_AudioEffect.h"
+#include "include/com_feifei_webrtcaudioprocess_jni_AudioResample.h"
 
 #include <jni.h>
 #include <stdlib.h>
@@ -215,4 +217,39 @@ extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect
 extern "C" JNIEXPORT jboolean JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioHasVoice(JNIEnv *env, jobject thiz, jlong audioProcessingID){
     webrtc::AudioProcessing* apm = (webrtc::AudioProcessing*)audioProcessingID;
     return apm->voice_detection()->stream_has_voice();
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioResampleInit(JNIEnv *env, jobject thiz, jint inFreq, jint outFreq, jint channels){
+    webrtc::Resampler* resample = new webrtc::Resampler(inFreq,outFreq,channels);
+    return (jlong)resample;
+}
+
+extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioResampleReset(JNIEnv *env, jobject thiz, jlong audioResampleID, jint inFreq, jint outFreq, jint channels){
+    webrtc::Resampler* resample = (webrtc::Resampler*)audioResampleID;
+    return resample->Reset(inFreq,outFreq,channels);
+}
+
+extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioResampleResetIfNeeded(JNIEnv *env, jobject thiz, jlong audioResampleID, jint inFreq, jint outFreq, jint channels){
+    webrtc::Resampler* resample = (webrtc::Resampler*)audioResampleID;
+    return resample->ResetIfNeeded(inFreq,outFreq,channels);
+}
+
+extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioResamplePush(JNIEnv *env, jobject thiz, jlong audioResampleID, jshortArray inputBuffer, jint inLength, jshortArray outputBuffer, jint maxLength, jint outputLength){
+    webrtc::Resampler* resample = (webrtc::Resampler*)audioResampleID;
+    size_t lenght = outputLength;
+
+    short *input = (short*)env->GetShortArrayElements(inputBuffer, nullptr);
+    short *output = (short*)env->GetShortArrayElements(outputBuffer, nullptr);
+
+    int ret = resample->Push(input,inLength,output,maxLength,lenght);
+
+    env->ReleaseShortArrayElements(inputBuffer, input, 0);
+    env->ReleaseShortArrayElements(outputBuffer, output, 0);
+
+    return ret;
+}
+
+extern "C" JNIEXPORT void JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioResampleDestroy(JNIEnv *env, jobject thiz, jlong audioResampleID){
+    webrtc::Resampler* resample = (webrtc::Resampler*)audioResampleID;
+    delete resample;
 }
