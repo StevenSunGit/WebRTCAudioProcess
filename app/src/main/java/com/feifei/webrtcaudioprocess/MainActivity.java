@@ -14,7 +14,9 @@ import com.feifei.webrtcaudioprocess.AudioEffect.AudioEffectUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -105,15 +107,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.resample:
                 break;
             case R.id.hpf:
-                break;
-            case R.id.ns:
-                ExecutorService testFileThreadExecutor = Executors.newSingleThreadExecutor();
-                testFileThreadExecutor.execute(()->{
+                ExecutorService hpfExecutor = Executors.newSingleThreadExecutor();
+                hpfExecutor.execute(()->{
                     try {
-                        /* 消噪前文件夹 */
+                        /* hpf前文件夹 */
                         File inFiles = new File(root + File.separator + "inFiles");
                         inFiles.mkdirs();
-                        /* 消噪后文件夹 */
+                        /* hpf后文件夹 */
+                        File outFiles = new File(root + File.separator + "outFiles");
+                        outFiles.mkdirs();
+                        AudioEffectUtils audioEffectUtils = new AudioEffectUtils();
+                        audioEffectUtils.audioEffectInit(2, 16000);
+                        audioEffectUtils.setHighPassFilterParameter(true);
+
+                        int minBufferSize = AudioEffectUtils.get10msBufferInByte(16000, 16);
+                        short[] datashort = new short[minBufferSize/2];
+                        byte[] databyte = new byte[minBufferSize];
+
+                        for (File inFile : inFiles.listFiles()){
+                            InputStream inputStream = new FileInputStream(inFile);
+                            OutputStream outputStream = new FileOutputStream(outFiles.getAbsolutePath() + File.separator + inFile.getName());
+
+                            int ret = 0;
+                            while ((ret = inputStream.read(databyte)) > 0){
+                                /*字节转化*/
+                                ByteBuffer.wrap(databyte).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(datashort);
+
+                                /*送入模型*/
+                                audioEffectUtils.audioProcessStream(datashort);
+
+                                /* 保存消噪效果 */
+                                ByteBuffer.wrap(databyte).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().put(datashort);
+                                outputStream.write(databyte);
+                                outputStream.flush();
+                            }
+                        }
+                        audioEffectUtils.audioEffectDestroy();
+                        Log.d(TAG, "finish hpf test");
+                    }catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                break;
+            case R.id.ns:
+                ExecutorService nsExecutor = Executors.newSingleThreadExecutor();
+                nsExecutor.execute(()->{
+                    try {
+                        /* ns前文件夹 */
+                        File inFiles = new File(root + File.separator + "inFiles");
+                        inFiles.mkdirs();
+                        /* ns后文件夹 */
                         File outFiles = new File(root + File.separator + "outFiles");
                         outFiles.mkdirs();
 
