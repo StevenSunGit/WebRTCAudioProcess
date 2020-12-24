@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private  static String TAG = "MainActivity";
 
     private final int GrantCode = 1;
-    private Button ns, vad, agc, aec;
+    private Button resample, hpf, ns, vad, agc, aec, aecm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +76,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void grantPermission(){
+        resample = findViewById(R.id.resample);
+        resample.setOnClickListener(this);
+
+        hpf = findViewById(R.id.hpf);
+        hpf.setOnClickListener(this);
+
         ns = findViewById(R.id.ns);
         ns.setOnClickListener(this);
 
@@ -87,12 +93,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         aec = findViewById(R.id.aec);
         aec.setOnClickListener(this);
+
+        aecm = findViewById(R.id.aecm);
+        aecm.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         String root = getExternalFilesDir("").getAbsolutePath();
         switch (v.getId()){
+            case R.id.resample:
+                break;
+            case R.id.hpf:
+                break;
             case R.id.ns:
                 ExecutorService testFileThreadExecutor = Executors.newSingleThreadExecutor();
                 testFileThreadExecutor.execute(()->{
@@ -143,6 +156,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.agc:
                 break;
             case R.id.aec:
+                break;
+            case R.id.aecm:
                 break;
             default:
                 break;

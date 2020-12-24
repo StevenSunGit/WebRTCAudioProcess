@@ -4,7 +4,16 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <Button
+        android:id="@+id/resample"
+        android:text="resample"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/hpf"
+        android:text="hpf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <Button
         android:id="@+id/ns"
         android:text="ns"
@@ -23,6 +32,11 @@
     <Button
         android:id="@+id/aec"
         android:text="aec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/aecm"
+        android:text="aecm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 </LinearLayout>
