@@ -14,7 +14,7 @@ public class AudioEffectUtils {
     private int mVDLikeLiHood = -1;
 
     private long audioNeareFrameID = 0;
-    private long audioFareFrameID = 0;
+    private long audioFarFrameID = 0;
     private long extendedFilterID = 0;
     private long delayAgnosticID = 0;
     private long audioProcessingID = 0;
@@ -64,8 +64,9 @@ public class AudioEffectUtils {
 
     public void audioEffectInit(int sampleChannel, int sampleRate){
         audioNeareFrameID = audioEffectInterface.audioNearFrameCreate(sampleChannel, sampleRate);
-        audioFareFrameID = audioEffectInterface.audioFarFrameCreate(sampleChannel, sampleRate);
-        audioProcessingID = audioEffectInterface.audioProcessingCreate(audioNeareFrameID, audioFareFrameID, mNSLevel, mGCMode, mECLevel, mVDLikeLiHood);
+        audioFarFrameID = audioEffectInterface.audioFarFrameCreate(sampleChannel, sampleRate);
+
+        audioProcessingID = audioEffectInterface.audioProcessingCreate(audioNeareFrameID, audioFarFrameID, mNSLevel, mGCMode, mECLevel, mVDLikeLiHood);
     }
 
     public int audioProcessReverseStream(short[] audioBuffers){
@@ -77,6 +78,6 @@ public class AudioEffectUtils {
     }
 
     public void audioEffectDestroy(){
-        audioEffectInterface.audioProcessingDestroy(audioNeareFrameID, extendedFilterID, delayAgnosticID);
+        audioEffectInterface.audioProcessingDestroy(audioNeareFrameID, audioFarFrameID);
     }
 }
