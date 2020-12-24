@@ -39,7 +39,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
     return (jlong)audioFrame;
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessingCreate(JNIEnv *env, jobject thiz, jlong nearFrameID, jlong farFrameID, jint ns, jint gc, jint ec, jint vd){
+extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessingCreate(JNIEnv *env, jobject thiz, jlong nearFrameID, jlong farFrameID){
     webrtc::Config config;
     config.Set<webrtc::ExtendedFilter>(new webrtc::ExtendedFilter(true));
     config.Set<webrtc::Intelligibility>(new webrtc::Intelligibility(true));
@@ -53,49 +53,20 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
                      {((webrtc::AudioFrame*)nearFrameID)->sample_rate_hz_, ((webrtc::AudioFrame*)nearFrameID)->num_channels_},
                      {((webrtc::AudioFrame*)farFrameID)->sample_rate_hz_, ((webrtc::AudioFrame*)farFrameID)->num_channels_},
                      {((webrtc::AudioFrame*)farFrameID)->sample_rate_hz_, ((webrtc::AudioFrame*)farFrameID)->num_channels_}}});
-    /* EchoCancellation回声消除 */
-    if(ec != -1){
-        ALOGI("gc set level: %d", ec);
-        apm->echo_cancellation()->enable_drift_compensation(true);
-        apm->echo_cancellation()->set_suppression_level(webrtc::EchoCancellation::kHighSuppression);
-        switch (ec) {
-            case 0:
-                apm->echo_cancellation()->set_suppression_level(webrtc::EchoCancellation::kLowSuppression);
-                break;
-            case 1:
-                apm->echo_cancellation()->set_suppression_level(webrtc::EchoCancellation::kModerateSuppression);
-                break;
-            case 2:
-    			apm->echo_cancellation()->set_suppression_level(webrtc::EchoCancellation::kHighSuppression);
-    		default:
-                break;
-        }
-    }
 
-    /* VoiceDetection语音活动检测 */
-    if(vd != -1){
-        ALOGI("vd set mode: %d", vd);
-		switch(vd){
-			case 0:
-				apm->voice_detection()->set_likelihood(webrtc::VoiceDetection::kVeryLowLikelihood);
-      			apm->voice_detection()->set_frame_size_ms(10);
-      			break;
-			case 1:
-				apm->voice_detection()->set_likelihood(webrtc::VoiceDetection::kHighLikelihood);
-      			apm->voice_detection()->set_frame_size_ms(10);
-      			break;
-    		default:
-                break;
-		}
-    }
-    apm->Initialize();
     return (jlong)apm;
 }
 
+/* HighPassFilter高通滤波器 */
+extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_setHighPassFilterParameter(JNIEnv *env, jobject thiz, jlong audioProcessingID, jboolean enable){
+    webrtc::AudioProcessing* apm = (webrtc::AudioProcessing*)audioProcessingID;
+    return apm->high_pass_filter()->Enable(enable);
+}
+
+/* NoiseSuppression噪声抑制 */
 extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_setNoiseSuppressionParameter(JNIEnv *env, jobject thiz, jlong audioProcessingID, jint level){
     webrtc::AudioProcessing* apm = (webrtc::AudioProcessing*)audioProcessingID;
     int ret = -1;
-    /* NoiseSuppression噪声抑制 */
     ALOGI("ns set level: %d", level);
     apm->noise_suppression()->Enable(true);
     switch (level) {
@@ -117,16 +88,17 @@ extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect
     return ret;
 }
 
-extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_setGainControlParameter(JNIEnv *env, jobject thiz, jlong audioProcessingID, jint mode){
+/* GainControl增益控制 */
+extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_setGainControlParameter(JNIEnv *env, jobject thiz, jlong audioProcessingID, jint targetLevel, jint compressionGrain, jint mode){
     webrtc::AudioProcessing* apm = (webrtc::AudioProcessing*)audioProcessingID;
     int ret = -1;
-    /* GainControl增益控制 */
     ALOGI("gc set mode: %d", mode);
     apm->gain_control()->Enable(true);
+    apm->gain_control()->enable_limiter(true);
+
     apm->gain_control()->set_analog_level_limits(0, 255);
-    //apm->_apm->gain_control()->set_target_level_dbfs(level);
-    //apm->_apm->gain_control()->set_compression_gain_db(gain);
-    //apm->_apm->gain_control()->enable_limiter(enable);
+    apm->gain_control()->set_target_level_dbfs(targetLevel);
+    apm->gain_control()->set_compression_gain_db(compressionGrain);
     switch (mode) {
         case 0:
             ret = apm->gain_control()->set_mode(webrtc::GainControl::kAdaptiveAnalog);
@@ -139,14 +111,69 @@ extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect
             break;
         default:
             break;
-        }
+    }
     return ret;
 }
 
+/* EchoCancellation回声消除 */
+extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_setEchoCancellationParameter(JNIEnv *env, jobject thiz, jlong audioProcessingID, jint level){
+    webrtc::AudioProcessing* apm = (webrtc::AudioProcessing*)audioProcessingID;
+    int ret = -1;
+    ALOGI("ec set level: %d", level);
+    apm->echo_cancellation()->Enable(true);
+    apm->echo_cancellation()->enable_drift_compensation(true);
+    switch (level) {
+        case 0:
+            ret = apm->echo_cancellation()->set_suppression_level(webrtc::EchoCancellation::kLowSuppression);
+            break;
+        case 1:
+            ret = apm->echo_cancellation()->set_suppression_level(webrtc::EchoCancellation::kModerateSuppression);
+            break;
+        case 2:
+    		ret = apm->echo_cancellation()->set_suppression_level(webrtc::EchoCancellation::kHighSuppression);
+    	default:
+            break;
+    }
+    return ret;
+}
 
-extern "C" JNIEXPORT void JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessingDestroy(JNIEnv *env, jobject thiz, jlong nearFrameID, jlong farFrameID){
-    delete (webrtc::AudioFrame*)nearFrameID;
-    delete (webrtc::ExtendedFilter*)farFrameID;
+/* EchoCancellationMobile回声消除 */
+extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_setEchoCancellationMobileParameter(JNIEnv *env, jobject thiz, jlong audioProcessingID, jint level){
+    webrtc::AudioProcessing* apm = (webrtc::AudioProcessing*)audioProcessingID;
+    int ret = -1;
+    ALOGI("ecm set level: %d", level);
+    apm->echo_control_mobile()->Enable(true);
+    switch (level) {
+        case 0:
+            ret = apm->echo_control_mobile()->set_routing_mode(webrtc::EchoControlMobile::kQuietEarpieceOrHeadset);
+            break;
+        case 1:
+            ret = apm->echo_control_mobile()->set_routing_mode(webrtc::EchoControlMobile::kLoudSpeakerphone);
+            break;
+    	default:
+            break;
+    }
+    return ret;
+}
+
+/* VoiceDetection语音活动检测 */
+extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_setVoiceDetectionParameter(JNIEnv *env, jobject thiz, jlong audioProcessingID, jint likelihood){
+    webrtc::AudioProcessing* apm = (webrtc::AudioProcessing*)audioProcessingID;
+    int ret = -1;
+    ALOGI("vd set likelihood: %d", likelihood);
+    apm->voice_detection()->Enable(true);
+    apm->voice_detection()->set_frame_size_ms(10);
+	switch(likelihood){
+		case 0:
+			ret = apm->voice_detection()->set_likelihood(webrtc::VoiceDetection::kVeryLowLikelihood);
+      		break;
+		case 1:
+			ret = apm->voice_detection()->set_likelihood(webrtc::VoiceDetection::kHighLikelihood);
+      		break;
+    	default:
+            break;
+	}
+	return ret;
 }
 
 extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessReverseStream(JNIEnv *env, jobject thiz, jlong audioProcessingID, jlong nearFrameID, jshortArray audioBuffers){
@@ -172,4 +199,14 @@ extern "C" JNIEXPORT jint JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect
     env->ReleaseShortArrayElements(audioBuffers, buffers, 0);
 
     return ret;
+}
+
+extern "C" JNIEXPORT jboolean JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioHasVoice(JNIEnv *env, jobject thiz, jlong audioProcessingID){
+    webrtc::AudioProcessing* apm = (webrtc::AudioProcessing*)audioProcessingID;
+    return apm->voice_detection()->stream_has_voice();
+}
+
+extern "C" JNIEXPORT void JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffect_AudioEffectInterface_audioProcessingDestroy(JNIEnv *env, jobject thiz, jlong nearFrameID, jlong farFrameID){
+    delete (webrtc::AudioFrame*)nearFrameID;
+    delete (webrtc::ExtendedFilter*)farFrameID;
 }
