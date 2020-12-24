@@ -95,6 +95,6 @@ public class AudioEffectUtils {
     }
 
     public void audioEffectDestroy(){
-        mAudioEffectInterface.audioProcessingDestroy(mAudioNeareFrameID, mAudioFarFrameID);
+        mAudioEffectInterface.audioProcessingDestroy(mAudioProcessingID, mAudioNeareFrameID, mAudioFarFrameID);
     }
 }
