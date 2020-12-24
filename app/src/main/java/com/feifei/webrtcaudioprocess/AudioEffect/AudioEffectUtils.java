@@ -5,9 +5,6 @@ public class AudioEffectUtils {
 
     private AudioEffectInterface mAudioEffectInterface;
 
-    private int mSampleChannel = 0;
-    private int mSampleRate = 0;
-
     private long mAudioNeareFrameID = 0;
     private long mAudioFarFrameID = 0;
     private long mAudioProcessingID = 0;
@@ -16,8 +13,12 @@ public class AudioEffectUtils {
         mAudioEffectInterface = new AudioEffectInterface();
     }
 
-    public static int getMinBufferInByte(int frequency){
-        return 10 * frequency / 1000 * 16 / 8;
+    /* MinBuffer参数说明
+       1. frequency：8000Hz, 16000Hz, 32000Hz, 47000Hz
+       2. audioFormat: 8, 16, 32
+     */
+    public static int getMinBufferInByte(int frequency, int audioFormat){
+        return 10 * frequency / 1000 * audioFormat / 8;
     }
 
     public void audioEffectInit(int sampleChannel, int sampleRate){
@@ -27,6 +28,11 @@ public class AudioEffectUtils {
         mAudioProcessingID = mAudioEffectInterface.audioProcessingCreate(mAudioNeareFrameID, mAudioFarFrameID);
     }
 
+    /* HighPassFilter高通滤波器 */
+    public int setHighPassFilterParameter(boolean enable){
+        return mAudioEffectInterface.setHighPassFilterParameter(mAudioProcessingID, enable);
+    }
+
     /* NoiseSuppression噪声抑制
         一. level参数说明：
             0. webrtc::NoiseSuppression::kLow
@@ -34,8 +40,8 @@ public class AudioEffectUtils {
             2. webrtc::NoiseSuppression::kHigh, 默认值
             3. webrtc::NoiseSuppression::kVeryHigh
     */
-    public void setNoiseSuppressionParameter(int level){
-        mAudioEffectInterface.setNoiseSuppressionParameter(mAudioProcessingID, level);
+    public int setNoiseSuppressionParameter(int level){
+        return mAudioEffectInterface.setNoiseSuppressionParameter(mAudioProcessingID, level);
     }
 
     /* GainControl增益控制targetLevel：
@@ -50,8 +56,8 @@ public class AudioEffectUtils {
             1. webrtc::GainControl::kAdaptiveDigital
             2. webrtc::GainControl::kFixedDigital
     */
-    public void setGainControlParameter(int targetLevel, int compressionGrain, int mode){
-        mAudioEffectInterface.setGainControlParameter(mAudioProcessingID, targetLevel, compressionGrain, mode);
+    public int setGainControlParameter(int targetLevel, int compressionGrain, int mode){
+        return mAudioEffectInterface.setGainControlParameter(mAudioProcessingID, targetLevel, compressionGrain, mode);
     }
 
     /* EchoCancellation回声消除：
@@ -59,24 +65,24 @@ public class AudioEffectUtils {
         1. webrtc::EchoCancellation::kModerateSuppression
         2. webrtc::EchoCancellation::kHighSuppression
     */
-    public void setEchoCancellationLevel(int level){
-        mAudioEffectInterface.setEchoCancellationParameter(mAudioProcessingID, level);
+    public int setEchoCancellationLevel(int level){
+        return mAudioEffectInterface.setEchoCancellationParameter(mAudioProcessingID, level);
     }
 
     /* EchoCancellationMobile回声消除：
         0. webrtc::EchoControlMobile::kQuietEarpieceOrHeadset
         1. webrtc::EchoControlMobile::kLoudSpeakerphone
     */
-    public void setEchoCancellationMobileParameter(int level){
-        mAudioEffectInterface.setEchoCancellationMobileParameter(mAudioProcessingID, level);
+    public int setEchoCancellationMobileParameter(int level){
+        return mAudioEffectInterface.setEchoCancellationMobileParameter(mAudioProcessingID, level);
     }
 
     /* VoiceDetection语音活动检测：
         0. webrtc::VoiceDetection::kVeryLowLikelihood
         1. webrtc::VoiceDetection::kHighLikelihood
     */
-    public void setVoiceDetectionLikeLiHood(int likelihood){
-        mAudioEffectInterface.setVoiceDetectionParameter(mAudioProcessingID, likelihood);
+    public int setVoiceDetectionLikeLiHood(int likelihood){
+        return mAudioEffectInterface.setVoiceDetectionParameter(mAudioProcessingID, likelihood);
     }
 
 

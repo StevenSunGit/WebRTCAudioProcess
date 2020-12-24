@@ -105,10 +105,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         outFiles.mkdirs();
 
                         AudioEffectUtils audioEffectUtils = new AudioEffectUtils();
-                        audioEffectUtils.setNoiseSuppressionLevel(2);
                         audioEffectUtils.audioEffectInit(2, 16000);
+                        audioEffectUtils.setNoiseSuppressionParameter(2);
 
-                        int minBufferSize = AudioEffectUtils.getMinBufferInByte(16000);
+                        int minBufferSize = AudioEffectUtils.getMinBufferInByte(16000, 16);
                         short[] datashort = new short[minBufferSize/2];
                         byte[] databyte = new byte[minBufferSize];
 
