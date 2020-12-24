@@ -17,7 +17,7 @@ public class AudioEffectUtils {
        1. frequency：8000Hz, 16000Hz, 32000Hz, 47000Hz
        2. audioFormat: 8, 16, 32
      */
-    public static int getMinBufferInByte(int frequency, int audioFormat){
+    public static int get10msBufferInByte(int frequency, int audioFormat){
         return 10 * frequency / 1000 * audioFormat / 8;
     }
 
