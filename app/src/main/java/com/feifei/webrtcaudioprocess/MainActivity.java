@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.feifei.webrtcaudioprocess.AudioEffect.AudioEffectUtils;
+import com.feifei.webrtcaudioprocess.AudioResample.AudioResampleUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -105,6 +106,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String root = getExternalFilesDir("").getAbsolutePath();
         switch (v.getId()){
             case R.id.resample:
+                ExecutorService resampleExecutor = Executors.newSingleThreadExecutor();
+                resampleExecutor.execute(()->{
+                    try {
+                        /* resample前文件夹 */
+                        File inFiles = new File(root + File.separator + "inFiles");
+                        inFiles.mkdirs();
+                        /* resample后文件夹 */
+                        File outFiles = new File(root + File.separator + "outFiles");
+                        outFiles.mkdirs();
+
+                        AudioResampleUtils audioResampleUtils = new AudioResampleUtils();
+                        audioResampleUtils.audioResampleInit(16000, 41100, 2);
+
+                        int minBufferSize = AudioEffectUtils.get10msBufferInByte(16000, 16);
+                        short[] inDatashort = new short[minBufferSize/2];
+                        short[] outDatashort = new short[minBufferSize/2];
+
+                        byte[] inDatabyte = new byte[minBufferSize];
+                        byte[] outDatabyte = new byte[minBufferSize];
+
+                        for (File inFile : inFiles.listFiles()){
+                            InputStream inputStream = new FileInputStream(inFile);
+                            OutputStream outputStream = new FileOutputStream(outFiles.getAbsolutePath() + File.separator + inFile.getName());
+
+                            int ret = 0;
+                            while ((ret = inputStream.read(inDatabyte)) > 0){
+                                /*字节转化*/
+                                ByteBuffer.wrap(inDatabyte).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(inDatashort);
+
+                                /*送入模型*/
+                                audioResampleUtils.audioResamplePush(inDatashort, ret/2, outDatashort, ret/2);
+
+                                /* 保存消噪效果 */
+                                ByteBuffer.wrap(outDatabyte).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().put(outDatashort);
+                                outputStream.write(outDatabyte);
+                                outputStream.flush();
+                            }
+                        }
+
+                        audioResampleUtils.audioResampleDestroy();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
                 break;
             case R.id.hpf:
                 ExecutorService hpfExecutor = Executors.newSingleThreadExecutor();
@@ -116,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         /* hpf后文件夹 */
                         File outFiles = new File(root + File.separator + "outFiles");
                         outFiles.mkdirs();
+
                         AudioEffectUtils audioEffectUtils = new AudioEffectUtils();
                         audioEffectUtils.audioEffectInit(2, 16000);
                         audioEffectUtils.setHighPassFilterParameter(true);
