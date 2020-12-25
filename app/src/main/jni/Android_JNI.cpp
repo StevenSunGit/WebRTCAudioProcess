@@ -23,7 +23,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
     /* 暂定送入10ms数据 */
     float frame_step = 10;
     /* 暂定送入单声道数据 */
-    audioFrame->num_channels_ = sampleChannel;
+    audioFrame->num_channels_ = 1;
     audioFrame->samples_per_channel_ = sampleRate * frame_step / 1000.0;
     audioFrame->sample_rate_hz_ = sampleRate;
 
@@ -36,7 +36,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_feifei_webrtcaudioprocess_AudioEffec
     /* 暂定送入10ms数据 */
     float frame_step = 10;
     /* 暂定送入单声道数据 */
-    audioFrame->num_channels_ = sampleChannel;
+    audioFrame->num_channels_ = 1;
     audioFrame->samples_per_channel_ = sampleRate * frame_step / 1000.0;
     audioFrame->sample_rate_hz_ = sampleRate;
 
