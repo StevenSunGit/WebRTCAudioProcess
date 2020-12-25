@@ -18,7 +18,7 @@ public class AudioEffectUtils {
        2. audioFormat: 8, 16, 32
      */
     public static int get10msBufferInByte(int frequency, int audioFormat){
-        return 10 * frequency / 1000 * audioFormat / 8;
+        return 10 * frequency / 1000 ;
     }
 
     public void audioEffectInit(int sampleChannel, int sampleRate){

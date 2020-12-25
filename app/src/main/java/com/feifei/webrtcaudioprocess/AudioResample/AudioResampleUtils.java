@@ -28,8 +28,8 @@ public class AudioResampleUtils {
         return 1;
     }
 
-    public int audioResamplePush(short[] inputBuffer, int inLength, short[] outputBuffer, int outputLength){
-        return mAudioResampleInterface.audioResamplePush(audioResampleID, inputBuffer, inLength, outputBuffer, outputLength, 16000/44100);
+    public int audioResamplePush(short[] inputBuffer, int inLength, short[] outputBuffer, int outputLength, int rate){
+        return mAudioResampleInterface.audioResamplePush(audioResampleID, inputBuffer, inLength, outputBuffer, outputLength, rate * outputFrequency/intputFrequency);
     }
 
     public void audioResampleDestroy(){

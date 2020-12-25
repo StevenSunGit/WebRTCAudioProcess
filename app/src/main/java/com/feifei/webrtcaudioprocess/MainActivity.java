@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 ByteBuffer.wrap(inDatabyte).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(inDatashort);
 
                                 /*送入模型*/
-                                audioResampleUtils.audioResamplePush(inDatashort, inMinBufferSize, outDatashort, outMinBufferSize);
+                                audioResampleUtils.audioResamplePush(inDatashort, inMinBufferSize, outDatashort, outMinBufferSize, 1);
 
                                 /* 保存消噪效果 */
                                 ByteBuffer.wrap(outDatabyte).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().put(outDatashort);
